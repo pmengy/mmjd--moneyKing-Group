@@ -1,5 +1,5 @@
 <template>
-  <el-alert :title="`数据一共 ${total} 条`" type="warning" show-icon>
+  <el-alert :title="`数据一共 ${total} 条`" type="info" show-icon>
   </el-alert>
 </template>
 
