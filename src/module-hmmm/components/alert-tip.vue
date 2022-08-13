@@ -1,5 +1,10 @@
 <template>
-  <el-alert :title="`数据一共 ${total} 条`" type="info" show-icon>
+  <el-alert
+    :title="`数据一共 ${total} 条`"
+    type="info"
+    :closable="false"
+    show-icon
+  >
   </el-alert>
 </template>
 
