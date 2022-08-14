@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>题组管理</div>
+  <div class='app-container'>题组管理</div>
 </template>
 
 <script>
