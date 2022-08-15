@@ -2,9 +2,16 @@
   <div class="container">
     <div v-if="!isShowSearch"></div>
     <div class="left" v-if="isShowSearch">
-      <el-input v-model="input" :placeholder="placeholder"></el-input>
-      <el-button size="mini" class="middle-btn">{{ text1 }}</el-button>
-      <el-button type="primary" size="mini">{{ text2 }}</el-button>
+      <el-input
+        v-model.trim="searchValue"
+        :placeholder="placeholder"
+      ></el-input>
+      <el-button size="mini" class="middle-btn" @click="clearAll">{{
+        text1
+      }}</el-button>
+      <el-button type="primary" size="mini" @click="confirm">{{
+        text2
+      }}</el-button>
     </div>
     <div class="right">
       <el-button
@@ -12,6 +19,7 @@
         size="mini"
         icon="el-icon-edit"
         class="rightBtn"
+        @click="addNew"
         >{{ rightText }}</el-button
       >
     </div>
@@ -22,7 +30,7 @@
 export default {
   data() {
     return {
-      input: "",
+      searchValue: "",
     };
   },
   props: {
@@ -49,7 +57,24 @@ export default {
   },
   created() {},
 
-  methods: {},
+  methods: {
+    // 确定
+    confirm() {
+      if (this.searchValue.trim().length == 0) {
+        return this.$message.warning("请输入用户名再进行搜索！");
+      } else {
+        this.$emit("searchUser", this.searchValue);
+      }
+    },
+    // 取消
+    clearAll() {
+      this.searchValue = "";
+      this.$emit("clearAll");
+    },
+    addNew() {
+      this.$emit("addNew");
+    },
+  },
 };
 </script>
 

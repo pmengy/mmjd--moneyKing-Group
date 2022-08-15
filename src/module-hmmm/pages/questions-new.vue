@@ -1,5 +1,5 @@
 <template>
-  <div class='container'>试题录入</div>
+  <div class='app-container'>试题录入</div>
 </template>
 
 <script>
