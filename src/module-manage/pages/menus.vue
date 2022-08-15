@@ -20,7 +20,7 @@ export default {
       name: "treeTable",
       treeList: [],
       columns: [
-        { prop: "title", text: "标题", value: "code" },
+        { prop: "title", text: "标题", value: "title" },
         { prop: "code", text: "权限组", value: "code" },
       ],
     };
