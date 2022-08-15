@@ -35,6 +35,7 @@
               size="mini"
               icon="el-icon-edit"
               class="rightBtn"
+              @click="labelVisible = true"
               >新增目录</el-button
             >
           </div>
@@ -52,6 +53,35 @@
       <!-- 底部分页 -->
       <PageTool></PageTool>
     </el-card>
+    <!-- 弹框 -->
+    <el-dialog title="收货地址" :visible.sync="labelVisible" width="25%">
+      <el-form :model="labelform" :rules="addRules">
+        <el-form-item label="所属学科" label-width="100px">
+          <el-select v-model="labelform.region" placeholder="请选择活动区域">
+            <el-option
+              v-for="item in tasklabelList"
+              :key="item.statusId"
+              :label="item.statusName"
+              :value="item.statusId"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="目录名称" prop="addName" label-width="100px">
+          <el-input
+            class="inputone"
+            v-model="labelform.name"
+            autocomplete="off"
+            placeholder="请输入目录名称"
+          ></el-input>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="labelVisible = false">取 消</el-button>
+        <el-button type="primary" @click="labelVisible = false"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,6 +97,8 @@ export default {
       taskStatusList: [], //搜索选择框数据
       formInline: {}, //搜索表单数据
       pageIndex: "", //页码
+      labelVisible: false, //新增弹窗
+      labelform: {}, //新增数据
       tableLabel: [
         { label: "所属学科", width: "180", prop: "subjectName" },
         { label: "目录名称", width: "180", prop: "directoryName" },
@@ -75,6 +107,10 @@ export default {
         { label: "面试题数量", width: "180", prop: "totals" },
         { label: "状态", width: "180", prop: "state" },
       ],
+      // 表单效验
+      addRules: {
+        addName: [{ required: true, message: "请输入", trigger: "blur" }],
+      },
     };
   },
 
@@ -126,5 +162,8 @@ export default {
   .rightBtn {
     height: 33px;
   }
+}
+.el-select {
+  display: block;
 }
 </style>

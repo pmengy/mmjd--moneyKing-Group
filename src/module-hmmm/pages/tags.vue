@@ -54,13 +54,10 @@
       <PageTool></PageTool>
     </el-card>
     <!-- 弹框 -->
-    <el-dialog title="收货地址" :visible.sync="labelVisible">
-      <el-form :model="labelform">
-        <el-form-item label="活动名称" label-width="120px">
-          <el-input v-model="labelform.name" autocomplete="off"></el-input>
-        </el-form-item>
-        <el-form-item label="活动区域" label-width="120px">
-          <el-select v-model="labelform.region" placeholder="请选择活动区域">
+    <el-dialog title="收货地址" :visible.sync="labelVisible" width="25%">
+      <el-form :model="labelform" :rules="addRules">
+        <el-form-item label="所属学科" label-width="100px">
+          <el-select v-model="labelform.region" placeholder="请选择">
             <el-option
               v-for="item in tasklabelList"
               :key="item.statusId"
@@ -68,6 +65,14 @@
               :value="item.statusId"
             ></el-option>
           </el-select>
+        </el-form-item>
+        <el-form-item label="标签名称" prop="addName" label-width="100px">
+          <el-input
+            class="inputone"
+            v-model="labelform.name"
+            autocomplete="off"
+            placeholder="请输入标签名称"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -94,7 +99,7 @@ export default {
       formInline: {}, //搜索表单数据
       pageIndex: "", //页码
       labelVisible: false, //新增弹窗
-      labelform:{},//新增数据
+      labelform: {}, //新增数据
       tableLabel: [
         { label: "所属学科", width: "210", prop: "subjectName" },
         { label: "标签名称", width: "210", prop: "tagName" },
@@ -102,6 +107,10 @@ export default {
         { label: "创建日期", width: "210", prop: "addDate" },
         { label: "状态", width: "210", prop: "state" },
       ],
+      // 表单效验
+      addRules: {
+        addName: [{ required: true, message: "请输入", trigger: "blur" }],
+      },
     };
   },
 
@@ -153,5 +162,8 @@ export default {
   .rightBtn {
     height: 33px;
   }
+}
+.el-select {
+  display: block;
 }
 </style>
