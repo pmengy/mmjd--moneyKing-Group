@@ -89,6 +89,7 @@
 import SearchHeader from "../components/SubjectComponent/search-header.vue";
 import PageTool from "../components/SubjectComponent/page-tool.vue";
 import Table from "../components/SubjectComponent/table/Thelabel.vue";
+import { list, simple, add } from "@/api/hmmm/tags";
 export default {
   data() {
     return {
@@ -116,9 +117,17 @@ export default {
 
   components: { SearchHeader, PageTool, Table },
 
-  created() {},
+  created() {
+    this.sunjectList();
+  },
 
   methods: {
+    // 列表获取
+    async sunjectList() {
+      const res = await list();
+      this.currentList = res.data.items;
+      console.log(res);
+    },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
     },

@@ -25,13 +25,13 @@
       <template slot-scope="scope">
         <el-button
           type="text"
-          style="color: red"
+          style="color: #4368e1"
           @click.native="$emit('Dev', scope.row.classId)"
           >学科分类</el-button
         >
         <el-button
           type="text"
-          style="color: red"
+          style="color: #4368e1"
           @click.native="$emit('Dev', scope.row.classId)"
           >学科标签</el-button
         >
@@ -43,7 +43,7 @@
         >
         <el-button
           type="text"
-          style="color: red"
+          style="color: #4368e1"
           @click.native="$emit('Dev', scope.row.classId)"
           >删除</el-button
         >

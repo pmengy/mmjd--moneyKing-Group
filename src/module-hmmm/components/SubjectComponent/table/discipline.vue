@@ -21,30 +21,24 @@
       :formatter="formatData"
     >
     </el-table-column>
-    <el-table-column label="操作" width="210">
+    <el-table-column label="操作" width="260">
       <template slot-scope="scope">
         <el-button
           type="text"
-          style="color: red"
+          style="color: #4368e1"
           @click.native="$emit('Dev', scope.row.classId)"
-          >学科分类</el-button
+          >禁用</el-button
         >
         <el-button
           type="text"
-          style="color: red"
+          style="color: #4368e1"
           @click.native="$emit('Dev', scope.row.classId)"
-          >学科标签</el-button
+          >修改</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
           @click.native="$emit('compile', scope.row.classId)"
-          >修改</el-button
-        >
-        <el-button
-          type="text"
-          style="color: red"
-          @click.native="$emit('Dev', scope.row.classId)"
           >删除</el-button
         >
       </template>
