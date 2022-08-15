@@ -152,9 +152,9 @@ export default {
     onClose() {
       // this.id = "";
       this.$emit("closeDialog");
-      // this.$emit("clearData");
       this.$refs.dataForm.resetFields();
       // this.formBase.id ? (this.formBase.id = null) : "";
+      this.$emit("clearData");
       // 移除所有表单值和校验结果
       this.formBase.introduction = "";
     },
