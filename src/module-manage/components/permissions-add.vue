@@ -205,6 +205,9 @@ export default {
       } else {
         this.dataFormSub(this.curPermissions)
       }
+      this.dialogFormH()
+      this.handleResetForm()
+      this.$emit('getList')
     },
     nodeDate (nodesPath, curPermissions, findId) {
       nodesPath.map(function (item, index) {

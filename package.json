@@ -9,6 +9,7 @@
     "fix": "vue-cli-service lint format"
   },
   "dependencies": {
+    "af-table-column": "^1.0.3",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "echarts": "^4.6.0",
