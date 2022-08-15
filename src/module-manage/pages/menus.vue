@@ -1,19 +1,44 @@
 <template>
   <div class="app-container">
-    <div>菜单管理</div>
-    <tree-table :data="treeList" />
+    <el-card>
+      <tree-table
+        :data="treeList"
+        :columns="columns"
+        :defaultExpandAll="true"
+        :treeStructure="true"
+      />
+    </el-card>
   </div>
 </template>
 
 <script>
+import TreeTable from "../components/TreeTable";
+import { list } from "@/api/base/menus";
 export default {
   data() {
-    return {};
+    return {
+      name: "treeTable",
+      treeList: [],
+      columns: [
+        { prop: "title", text: "标题", value: "code" },
+        { prop: "code", text: "权限组", value: "code" },
+      ],
+    };
+  },
+  components: {
+    TreeTable,
   },
 
-  created() {},
+  created() {
+    this.getTreeList();
+  },
 
-  methods: {},
+  methods: {
+    async getTreeList() {
+      const { data } = await list();
+      this.treeList = data;
+    },
+  },
 };
 </script>
 
