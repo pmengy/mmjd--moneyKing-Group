@@ -6,33 +6,14 @@
 </template>
 
 <script>
-import { list } from "@/api/base/menus";
-import TreeTable from "@/components/TreeTable";
 export default {
   data() {
-    return {
-      queryInfo: {
-        page: 1,
-        pagesize: 10,
-      },
-      treeList: [],
-    };
-  },
-  components: {
-    TreeTable,
+    return {};
   },
 
-  created() {
-    this.getPermissionList();
-  },
+  created() {},
 
-  methods: {
-    async getPermissionList() {
-      const { data } = await list();
-      // console.log(res);
-      this.treeList = data;
-    },
-  },
+  methods: {},
 };
 </script>
 
