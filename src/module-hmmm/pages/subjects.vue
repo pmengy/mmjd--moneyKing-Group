@@ -31,7 +31,7 @@
         </el-form>
       </el-card>
       <!-- 警示框 -->
-      <el-alert title="消息提示的文案" type="info" show-icon> </el-alert>
+      <el-alert title="消息提示的文案" type="info" show-icon :closable="false"> </el-alert>
       <!-- 表格 -->
       <Table
         :currentList="currentList"

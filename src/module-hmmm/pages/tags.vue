@@ -35,13 +35,15 @@
               size="mini"
               icon="el-icon-edit"
               class="rightBtn"
+              @click="labelVisible = true"
               >新增标签</el-button
             >
           </div>
         </el-form>
       </el-card>
       <!-- 警示框 -->
-      <el-alert title="消息提示的文案" type="info" show-icon> </el-alert>
+      <el-alert title="消息提示的文案" type="info" show-icon :closable="false">
+      </el-alert>
       <!-- 表格 -->
       <Table
         :currentList="currentList"
@@ -51,6 +53,30 @@
       <!-- 底部分页 -->
       <PageTool></PageTool>
     </el-card>
+    <!-- 弹框 -->
+    <el-dialog title="收货地址" :visible.sync="labelVisible">
+      <el-form :model="labelform">
+        <el-form-item label="活动名称" label-width="120px">
+          <el-input v-model="labelform.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="活动区域" label-width="120px">
+          <el-select v-model="labelform.region" placeholder="请选择活动区域">
+            <el-option
+              v-for="item in tasklabelList"
+              :key="item.statusId"
+              :label="item.statusName"
+              :value="item.statusId"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="labelVisible = false">取 消</el-button>
+        <el-button type="primary" @click="labelVisible = false"
+          >确 定</el-button
+        >
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -64,15 +90,17 @@ export default {
       // 表单数据
       currentList: [],
       taskStatusList: [], //搜索选择框数据
+      tasklabelList: [], //新增选择框数据
       formInline: {}, //搜索表单数据
-      pageIndex: "",//页码
+      pageIndex: "", //页码
+      labelVisible: false, //新增弹窗
+      labelform:{},//新增数据
       tableLabel: [
         { label: "所属学科", width: "210", prop: "subjectName" },
         { label: "标签名称", width: "210", prop: "tagName" },
         { label: "创建者", width: "210", prop: "creator" },
         { label: "创建日期", width: "210", prop: "addDate" },
         { label: "状态", width: "210", prop: "state" },
-
       ],
     };
   },
