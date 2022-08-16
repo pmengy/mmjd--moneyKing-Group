@@ -21,30 +21,30 @@
       :formatter="formatData"
     >
     </el-table-column>
-    <el-table-column label="操作" width="210">
+    <el-table-column label="操作" width="260">
       <template slot-scope="scope">
         <el-button
           type="text"
-          style="color: red"
-          @click.native="$emit('Dev', scope.row.classId)"
+          style="color: #4368e1"
+          @click.native="$emit('direct', scope.row)"
           >学科分类</el-button
         >
         <el-button
           type="text"
-          style="color: red"
-          @click.native="$emit('Dev', scope.row.classId)"
+          style="color: #4368e1"
+          @click.native="$emit('tags', scope.row)"
           >学科标签</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('compile', scope.row.classId)"
+          @click.native="$emit('compile', scope.row)"
           >修改</el-button
         >
         <el-button
           type="text"
-          style="color: red"
-          @click.native="$emit('Dev', scope.row.classId)"
+          style="color: #4368e1"
+          @click.native="$emit('Dev', scope.row.id)"
           >删除</el-button
         >
       </template>
@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+
 export default {
   data() {
     return {};
@@ -73,7 +75,18 @@ export default {
   },
   created() {},
 
-  methods: {},
+  methods: {
+    formatData(row, column, cellcValue, index) {
+      // console.log(column);
+      if (column.label === "前台是否显示") {
+        return cellcValue === 1 ? "是" : "否";
+      } else if (column.label === "创建日期") {
+        return dayjs(cellcValue).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        return cellcValue;
+      }
+    },
+  },
 };
 </script>
 

@@ -21,30 +21,21 @@
       :formatter="formatData"
     >
     </el-table-column>
-    <el-table-column label="操作" width="210">
+    <el-table-column label="操作" width="220">
       <template slot-scope="scope">
+        <el-button type="text" @click.native="$emit('disable', scope.row)">{{
+          scope.row.state === 1 ? "禁用" : "启用"
+        }}</el-button>
         <el-button
           type="text"
-          style="color: red"
-          @click.native="$emit('Dev', scope.row.classId)"
-          >学科分类</el-button
-        >
-        <el-button
-          type="text"
-          style="color: red"
-          @click.native="$emit('Dev', scope.row.classId)"
-          >学科标签</el-button
-        >
-        <el-button
-          type="text"
-          style="color: #4368e1"
-          @click.native="$emit('compile', scope.row.classId)"
+          @click.native="$emit('compile', scope.row)"
+          :disabled="scope.row.state === 1 ? false : true"
           >修改</el-button
         >
         <el-button
           type="text"
-          style="color: red"
-          @click.native="$emit('Dev', scope.row.classId)"
+          :disabled="scope.row.state === 1 ? false : true"
+          @click.native="$emit('Dev', scope.row.id)"
           >删除</el-button
         >
       </template>
@@ -53,9 +44,14 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+
 export default {
+  name: "dierct",
   data() {
-    return {};
+    return {
+      disabled: false,
+    };
   },
   props: {
     currentList: {
@@ -73,7 +69,18 @@ export default {
   },
   created() {},
 
-  methods: {},
+  methods: {
+    formatData(row, column, cellcValue, index) {
+      // console.log(column);
+      if (column.label === "状态") {
+        return cellcValue === 0 ? "已禁用" : "启用";
+      } else if (column.label === "创建日期") {
+        return dayjs(cellcValue).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        return cellcValue;
+      }
+    },
+  },
 };
 </script>
 

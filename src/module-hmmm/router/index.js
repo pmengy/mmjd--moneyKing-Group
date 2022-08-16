@@ -73,16 +73,29 @@ export default [
         meta: { title: '学科', noCache: true, icon: 'component' }
       },
       {
-        path: 'directorys',
+        path: 'directorys/',
         component: _import('hmmm/pages/directorys'),
         name: 'subjects-directorys',
         meta: { title: '目录', noCache: true, icon: 'component' }
       },
       {
-        path: 'tags',
+        path: 'tags/',
         component: _import('hmmm/pages/tags'),
         name: 'subjects-tags',
         meta: { title: '标签', noCache: true, icon: 'component' }
+      },
+      {
+        path: 'directorys/:id',
+        component: _import('hmmm/pages/directorys'),
+        name: 'subjects-directorys',
+        hidden: true,
+      },
+      {
+        path: 'tags/:id',
+        component: _import('hmmm/pages/tags'),
+        name: 'subjects-tags',
+        hidden: true,
+
       }
     ]
   },
