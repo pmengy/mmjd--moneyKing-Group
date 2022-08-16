@@ -34,6 +34,13 @@
             >
           </el-form-item>
           <div class="right">
+            <el-link
+              v-if="userId"
+              icon="el-icon-back"
+              type="primary"
+              @click="$router.go(-1)"
+              >返回学科</el-link
+            >
             <el-button
               type="success"
               size="mini"
@@ -111,6 +118,7 @@ import { simple } from "@/api/hmmm/subjects";
 export default {
   data() {
     return {
+      userId: this.$route.params.id, //跳转数据
       // 表单数据
       currentList: [],
       taskStatusList: [
@@ -158,8 +166,9 @@ export default {
     },
   },
   created() {
-    this.sunjectList();
+    // this.sunjectList();
     this.addtag();
+    this.routerid();
   },
 
   methods: {
@@ -182,10 +191,17 @@ export default {
     },
     // 搜索工单
     async search() {
-      if (this.formInline.directoryName == "" && this.formInline.state == "") {
-        await this.sunjectList();
+      if (!this.userId) {
+        if (
+          this.formInline.directoryName == "" &&
+          this.formInline.state == ""
+        ) {
+          await this.sunjectList();
+        } else {
+          await this.sunjectList(this.formInline);
+        }
       } else {
-        await this.sunjectList(this.formInline);
+        console.log("正常情况");
       }
     },
     // 清空搜索表单
@@ -199,7 +215,7 @@ export default {
     async addtag() {
       const res = await simple();
       this.tasklabelList = res.data;
-      console.log(res);
+      // console.log(res);
     },
     addNew() {
       this.labelVisible = true; //新增弹窗
@@ -235,7 +251,7 @@ export default {
       console.log(val);
       this.labelform = val;
     },
-  //禁用
+    //禁用
     nicedisable() {},
     // 删除
     async nicedev(id) {
@@ -243,6 +259,14 @@ export default {
       await remove({ id: id });
       this.$message.success("删除成功");
       this.sunjectList(this.page);
+    },
+    // 接收跳转
+    async routerid() {
+      if (this.userId) {
+        await this.sunjectList({ subjectID: this.userId });
+      } else {
+        this.sunjectList();
+      }
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
@@ -290,5 +314,8 @@ export default {
 }
 .el-select {
   display: block;
+}
+.el-link {
+  margin: 20px;
 }
 </style>

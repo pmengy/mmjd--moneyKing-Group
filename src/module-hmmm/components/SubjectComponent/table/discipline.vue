@@ -26,13 +26,13 @@
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('direct', scope.row.classId)"
+          @click.native="$emit('direct', scope.row)"
           >学科分类</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('tags', scope.row.classId)"
+          @click.native="$emit('tags', scope.row)"
           >学科标签</el-button
         >
         <el-button

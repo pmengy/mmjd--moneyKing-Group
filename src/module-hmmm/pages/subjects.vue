@@ -221,9 +221,13 @@ export default {
       this.labelform.isFrontDisplay = val.isFrontDisplay;
     },
     //跳转学科目录
-    nicedirect() {},
+    nicedirect(val) {
+      this.$router.push("/subjects/directorys/" + val.id);
+    },
     //跳转学科标签
-    nicetags() {},
+    nicetags(val) {
+      this.$router.push("/subjects/tags/" + val.id);
+    },
     // 删除
     async nicedev(id) {
       console.log(id);
