@@ -11,12 +11,12 @@
         <el-form :inline="true" :model="formInline" class="demo-form-inline">
           <el-form-item label="目录名称:" class="item">
             <el-input
-              v-model="formInline.taskCode"
+              v-model="formInline.directoryName"
               placeholder="请输入"
             ></el-input>
           </el-form-item>
           <el-form-item label="状态:" class="item">
-            <el-select v-model="formInline.status" placeholder="请选择">
+            <el-select v-model="formInline.state" placeholder="请选择">
               <el-option
                 v-for="item in taskStatusList"
                 :key="item.statusId"
@@ -26,8 +26,12 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <el-button size="mini" class="middle-btn">清空</el-button>
-            <el-button type="primary" size="mini">搜索</el-button>
+            <el-button size="mini" class="middle-btn" @click.native="empty"
+              >清空</el-button
+            >
+            <el-button type="primary" size="mini" @click.native="search"
+              >搜索</el-button
+            >
           </el-form-item>
           <div class="right">
             <el-button
@@ -106,9 +110,15 @@ export default {
     return {
       // 表单数据
       currentList: [],
-      taskStatusList: [], //搜索选择框数据
+      taskStatusList: [
+        { statusId: 0, statusName: "禁用" },
+        { statusId: 1, statusName: "启用" },
+      ], //搜索选择框数据
       tasklabelList: [], //新增选择框数据
-      formInline: {}, //搜索表单数据
+      formInline: {
+        directoryName: "",
+        state: "",
+      }, //搜索表单数据
       pageIndex: "", //页码
       labelVisible: false, //新增弹窗
       labelform: {}, //新增数据
@@ -140,8 +150,8 @@ export default {
 
   methods: {
     // 学科列表获取
-    async sunjectList() {
-      const res = await list(this.page);
+    async sunjectList(params) {
+      const res = await list(params);
       this.currentList = res.data.items;
       this.total = res.data.counts;
       console.log(res);
@@ -149,12 +159,27 @@ export default {
     // 根据页数跳转
     pageChange(val) {
       this.page.page = val;
-      this.sunjectList();
+      this.sunjectList(this.page);
     },
     // 根据每页多少请求
     pageSizeChange(val) {
       this.page.pagesize = val;
-      this.sunjectList();
+      this.sunjectList(this.page);
+    },
+    // 搜索工单
+    async search() {
+      if (this.formInline.directoryName == "" && this.formInline.state == "") {
+        await this.sunjectList();
+      } else {
+        await this.sunjectList(this.formInline);
+      }
+    },
+    // 清空搜索表单
+    empty() {
+      this.formInline = {
+        directoryName: "",
+        state: "",
+      };
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
