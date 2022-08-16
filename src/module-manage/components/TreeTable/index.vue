@@ -8,7 +8,12 @@
     highlight-current-row
     style="width: 100%"
     default-expand-all
-    :tree-props="{ children: 'childs', hasChildren: 'points' }"
+    show-header
+    :header-cell-style="{
+      background: '#fafafa',
+      color: '#9fa2a7',
+      borderBottom: '3px solid #e8e8e8',
+    }"
   >
     <el-table-column
       v-for="column in columns"
@@ -27,7 +32,27 @@
         >
         </expand>
         <span v-else>
-          {{ scope.row[column.value] }}
+          <template v-if="column.value == 'title'">
+            <i
+              class="el-icon-folder-opened"
+              style="margin-left: 20px"
+              v-if="scope.row._level === 0"
+            />
+            <i
+              class="el-icon-document"
+              v-if="scope.row._level === 1"
+              style="margin-left: 40px"
+            />
+            <i
+              class="el-icon-view"
+              v-if="scope.row._level === 2"
+              style="margin-left: 60px"
+            />
+            {{ scope.row[column.value] }}
+          </template>
+          <template v-if="column.value == 'code'">
+            {{ scope.row[column.value] }}
+          </template>
         </span>
       </template>
     </el-table-column>
@@ -108,16 +133,14 @@ export default {
   methods: {
     // 行类名状态
     rowClassStatus: function ({ row, rowIndex }) {
-      console.log(row, rowIndex);
       if (row._level === 0) {
-        console.log("我是1级");
         return "levelOne";
       } else if (row._level === 1) {
-        console.log("我是3");
         return "levelTwo";
       } else if (row._level === 2) {
-        console.log("我是3");
         return "levelThree";
+      } else if (rowIndex === 0) {
+        return "headerClass";
       }
     },
     // 修改
@@ -183,8 +206,8 @@ table td {
   color: $color-blue;
   margin-left: -$space-width;
 }
-.current {
-  color: red;
+::v-deep tr.headerClass {
+  background-color: red !important;
 }
 ::v-deep.el-table .levelOne {
   background: yellowgreen;
