@@ -39,7 +39,7 @@
               size="mini"
               icon="el-icon-edit"
               class="rightBtn"
-              @click="labelVisible = true"
+              @click="addtag"
               >新增标签</el-button
             >
           </div>
@@ -70,30 +70,29 @@
     </el-card>
     <!-- 弹框 -->
     <el-dialog title="收货地址" :visible.sync="labelVisible" width="25%">
-      <el-form :model="labelform" :rules="addRules">
+      <el-form ref="addref" :model="labelform" :rules="addRules">
         <el-form-item label="所属学科" label-width="100px">
-          <el-select v-model="labelform.region" placeholder="请选择">
+          <el-select v-model="labelform.subjectID" placeholder="请选择">
             <el-option
               v-for="item in tasklabelList"
-              :key="item.statusId"
-              :label="item.statusName"
-              :value="item.statusId"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="标签名称" prop="addName" label-width="100px">
+        <el-form-item label="标签名称" prop="tagName" label-width="100px">
           <el-input
             class="inputone"
-            v-model="labelform.name"
+            v-model="labelform.tagName"
             autocomplete="off"
             placeholder="请输入标签名称"
           ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="labelVisible = false">取 消</el-button>
-        <el-button type="primary" @click="labelVisible = false"
-          >确 定</el-button
+        <el-button @click="CancelNew">取 消</el-button>
+        <el-button type="primary" @click="newContent">确 定</el-button>
         >
       </div>
     </el-dialog>
@@ -104,7 +103,9 @@
 import SearchHeader from "../components/SubjectComponent/search-header.vue";
 import PageTool from "../components/SubjectComponent/page-tool.vue";
 import Table from "../components/SubjectComponent/table/Thelabel.vue";
-import { list, simple, add } from "@/api/hmmm/tags";
+import { list, add } from "@/api/hmmm/tags";
+import { simple } from "@/api/hmmm/subjects";
+
 export default {
   data() {
     return {
@@ -121,7 +122,10 @@ export default {
       }, //搜索表单数据
       pageIndex: "", //页码
       labelVisible: false, //新增弹窗
-      labelform: {}, //新增数据
+      labelform: {
+        subjectID: "", //学科id
+        tagName: "", //新增标签名称
+      }, //新增数据
       total: "", //总数
       page: {
         page: 1, //当前页数
@@ -136,7 +140,7 @@ export default {
       ],
       // 表单效验
       addRules: {
-        addName: [{ required: true, message: "请输入", trigger: "blur" }],
+        tagName: [{ required: true, message: "请输入", trigger: "blur" }],
       },
     };
   },
@@ -181,6 +185,31 @@ export default {
         state: "",
       };
     },
+    // 获取学科简单列表
+    async addtag() {
+      this.labelVisible = true;
+      const res = await simple();
+      this.tasklabelList = res.data;
+      console.log(res);
+    },
+    // 确认新增
+    async newContent() {
+      await this.$refs.addref.validate();
+      await add(this.labelform);
+      this.CancelNew();
+      this.$message.success("添加成功");
+      this.sunjectList(this.page);
+      this.labelVisible = false;
+    },
+    // 取消新增
+    CancelNew() {
+      this.labelVisible = false;
+      this.labelform = {
+        subjectID: "", //学科id
+        tagName: "", //新增标签名称
+      }; //新增数据
+    },
+
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
     },

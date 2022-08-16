@@ -60,29 +60,29 @@
     </el-card>
     <!-- 弹框 -->
     <el-dialog title="收货地址" :visible.sync="labelVisible" width="25%">
-      <el-form :model="labelform" :rules="addRules">
-        <el-form-item label="学科名称" prop="addName" label-width="100px">
+      <el-form ref="formadd" :model="labelform" :rules="addRules">
+        <el-form-item label="学科名称" prop="subjectName" label-width="100px">
           <el-input
             class="inputone"
-            v-model="labelform.name"
+            v-model="labelform.subjectName"
             autocomplete="off"
             placeholder="请输入学科名称"
           ></el-input>
         </el-form-item>
-        <el-form-item label="是否显示" prop="addName" label-width="100px">
+        <el-form-item label="是否显示" label-width="100px">
           <el-switch
-            v-model="value1"
+            v-model="labelform.isFrontDisplay"
             active-color="#13ce66"
             inactive-color="#ff4949"
+            active-value="0"
+            inactive-value="1"
           >
           </el-switch>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button @click="labelVisible = false">取 消</el-button>
-        <el-button type="primary" @click="labelVisible = false"
-          >确 定</el-button
-        >
+        <el-button @click="CancelNew">取 消</el-button>
+        <el-button type="primary" @click="newContent">确 定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -94,6 +94,7 @@ import PageTool from "../components/SubjectComponent/page-tool.vue";
 import Table from "../components/SubjectComponent/table/discipline.vue";
 import { list, simple, add } from "@/api/hmmm/subjects";
 export default {
+  name: "sunjectList",
   data() {
     return {
       // 表单数据
@@ -101,8 +102,10 @@ export default {
       formInline: { subjectName: "" }, //搜索表单数据
       pageIndex: "", //页码
       labelVisible: false, //新增弹窗
-      value1: true, //表单中是否显示
-      labelform: {}, //新增数据
+      labelform: {
+        isFrontDisplay: 1, //表单中是否显示
+        subjectName: "", //新增学科名称
+      }, //新增数据
       total: "", //总数
       page: {
         page: 1, //当前页数
@@ -120,7 +123,7 @@ export default {
       ],
       // 表单效验
       addRules: {
-        addName: [{ required: true, message: "请输入", trigger: "blur" }],
+        addName: [{ required: true, message: "请输入", trigger: "change" }],
       },
     };
   },
@@ -163,6 +166,27 @@ export default {
         subjectName: "",
       };
     },
+    // 确认新增
+    async newContent() {
+      await this.$refs.formadd.validate();
+      await add({
+        subjectName: this.labelform.subjectName,
+        isFrontDisplay: Number(this.labelform.isFrontDisplay),
+      });
+      this.CancelNew();
+      this.$message.success("添加成功");
+      this.sunjectList(this.page);
+      this.labelVisible = false;
+    },
+    // 取消新增
+    CancelNew() {
+      this.labelVisible = false;
+      this.labelform = {
+        isFrontDisplay: 0, //表单中是否显示
+        subjectName: "", //新增学科名称
+      }; //新增数据
+    },
+
     // 未知
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
