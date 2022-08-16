@@ -112,7 +112,7 @@
 import SearchHeader from "../components/SubjectComponent/search-header.vue";
 import PageTool from "../components/SubjectComponent/page-tool.vue";
 import Table from "../components/SubjectComponent/table/directory.vue";
-import { list, add, update, remove } from "@/api/hmmm/directorys";
+import { list, add, update, remove, changeState } from "@/api/hmmm/directorys";
 import { simple } from "@/api/hmmm/subjects";
 
 export default {
@@ -252,7 +252,19 @@ export default {
       this.labelform = val;
     },
     //禁用
-    nicedisable() {},
+    async nicedisable(val) {
+      const state = val.state === 1 ? 0 : 1;
+      if (!val.totals) {
+        await changeState({
+          id: val.id,
+          state: state,
+        });
+        this.$message.success("修改成功");
+        this.sunjectList(this.page);
+      } else {
+        this.$message.warning("存在面试题不可禁用");
+      }
+    },
     // 删除
     async nicedev(id) {
       console.log(id);

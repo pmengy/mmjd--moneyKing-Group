@@ -23,22 +23,21 @@
     </el-table-column>
     <el-table-column label="操作" width="210">
       <template slot-scope="scope">
+        <el-button type="text" @click.native="$emit('disable', scope.row)">{{
+          scope.row.state === 1 ? "禁用" : "启用"
+        }}</el-button>
         <el-button
           type="text"
-          style="color: #4368e1"
-          @click.native="$emit('disable', scope.row.classId)"
-          >禁用</el-button
+          :disabled="scope.row.state === 1 ? false : true"
+          @click.native="$emit('compile', scope.row)"
+          >修改</el-button
         >
         <el-button
           type="text"
-          style="color: #4368e1"
-          @click.native="$emit('compile', scope.row)"
-          >修改</el-button>
-        <el-button
-          type="text"
-          style="color: #4368e1"
+          :disabled="scope.row.state === 1 ? false : true"
           @click.native="$emit('Dev', scope.row.id)"
-          >删除</el-button>
+          >删除</el-button
+        >
       </template>
     </el-table-column>
   </el-table>
@@ -49,7 +48,9 @@ import dayjs from "dayjs";
 
 export default {
   data() {
-    return {};
+    return {
+      disabled: false,
+    };
   },
   props: {
     currentList: {
