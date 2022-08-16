@@ -26,25 +26,25 @@
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('Dev', scope.row.classId)"
+          @click.native="$emit('direct', scope.row.classId)"
           >学科分类</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('Dev', scope.row.classId)"
+          @click.native="$emit('tags', scope.row.classId)"
           >学科标签</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('compile', scope.row.classId)"
+          @click.native="$emit('compile', scope.row)"
           >修改</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('Dev', scope.row.classId)"
+          @click.native="$emit('Dev', scope.row.id)"
           >删除</el-button
         >
       </template>
@@ -79,7 +79,7 @@ export default {
     formatData(row, column, cellcValue, index) {
       // console.log(column);
       if (column.label === "前台是否显示") {
-        return cellcValue === 0 ? "是" : "否";
+        return cellcValue === 1 ? "是" : "否";
       } else if (column.label === "创建日期") {
         return dayjs(cellcValue).format("YYYY-MM-DD HH:mm:ss");
       } else {

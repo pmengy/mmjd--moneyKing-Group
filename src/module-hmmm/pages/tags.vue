@@ -1,4 +1,5 @@
 <template>
+  <!-- BUG,修改过程中会直接影响后台数据展示 -->
   <div class="app-container">
     <!-- 卡片控件 -->
     <el-card class="box-card">
@@ -39,7 +40,7 @@
               size="mini"
               icon="el-icon-edit"
               class="rightBtn"
-              @click="addtag"
+              @click="addNew"
               >新增标签</el-button
             >
           </div>
@@ -58,6 +59,9 @@
         :currentList="currentList"
         :tableLabel="tableLabel"
         :currentIndex="pageIndex * 10"
+        @compile="niceCompile"
+        @disable="nicedisable"
+        @Dev="nicedev"
       ></Table>
       <!-- 底部分页 -->
       <PageTool
@@ -69,7 +73,7 @@
       ></PageTool>
     </el-card>
     <!-- 弹框 -->
-    <el-dialog title="收货地址" :visible.sync="labelVisible" width="25%">
+    <el-dialog :title="activeTitle" :visible.sync="labelVisible" width="25%">
       <el-form ref="addref" :model="labelform" :rules="addRules">
         <el-form-item label="所属学科" label-width="100px">
           <el-select v-model="labelform.subjectID" placeholder="请选择">
@@ -93,7 +97,6 @@
       <div slot="footer" class="dialog-footer">
         <el-button @click="CancelNew">取 消</el-button>
         <el-button type="primary" @click="newContent">确 定</el-button>
-        >
       </div>
     </el-dialog>
   </div>
@@ -103,7 +106,7 @@
 import SearchHeader from "../components/SubjectComponent/search-header.vue";
 import PageTool from "../components/SubjectComponent/page-tool.vue";
 import Table from "../components/SubjectComponent/table/Thelabel.vue";
-import { list, add } from "@/api/hmmm/tags";
+import { list, add, update } from "@/api/hmmm/tags";
 import { simple } from "@/api/hmmm/subjects";
 
 export default {
@@ -122,10 +125,12 @@ export default {
       }, //搜索表单数据
       pageIndex: "", //页码
       labelVisible: false, //新增弹窗
+      Datastate: true, //详情/新增判断
       labelform: {
         subjectID: "", //学科id
         tagName: "", //新增标签名称
       }, //新增数据
+      idd: "", //修改id
       total: "", //总数
       page: {
         page: 1, //当前页数
@@ -146,9 +151,16 @@ export default {
   },
 
   components: { SearchHeader, PageTool, Table },
+  // 计算属性
+  computed: {
+    activeTitle() {
+      return this.Datastate ? "新增标签" : "修改标签";
+    },
+  },
 
   created() {
     this.sunjectList();
+    this.addtag();
   },
 
   methods: {
@@ -187,17 +199,25 @@ export default {
     },
     // 获取学科简单列表
     async addtag() {
-      this.labelVisible = true;
       const res = await simple();
       this.tasklabelList = res.data;
       console.log(res);
     },
-    // 确认新增
+    addNew() {
+      this.labelVisible = true; //新增弹窗
+      this.Datastate = true; //修改/新增判断
+    },
+    // 确认新增/修改
     async newContent() {
       await this.$refs.addref.validate();
-      await add(this.labelform);
+      if (this.Datastate) {
+        await add(this.labelform);
+        this.$message.success("添加成功");
+      } else {
+        await update(this.labelform);
+        this.$message.success("修改成功");
+      }
       this.CancelNew();
-      this.$message.success("添加成功");
       this.sunjectList(this.page);
       this.labelVisible = false;
     },
@@ -208,6 +228,23 @@ export default {
         subjectID: "", //学科id
         tagName: "", //新增标签名称
       }; //新增数据
+    },
+    // 展开修改
+    niceCompile(val) {
+      this.idd = val.id;
+      this.labelVisible = true; //新增弹窗
+      this.Datastate = false; //修改/新增判断
+      console.log(val);
+      this.labelform = val;
+    },
+    //禁用
+    nicedisable() {},
+    // 删除
+    async nicedev(id) {
+      console.log(id);
+      await remove({ id: id });
+      this.$message.success("删除成功");
+      this.sunjectList(this.page);
     },
 
     resetDateFilter() {

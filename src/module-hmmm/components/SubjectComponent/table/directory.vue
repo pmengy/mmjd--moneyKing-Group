@@ -26,19 +26,19 @@
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('Dev', scope.row.classId)"
+          @click.native="$emit('disable', scope.row.classId)"
           >禁用</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('Dev', scope.row.classId)"
-          >修改
-        </el-button>
+          @click.native="$emit('compile', scope.row)"
+          >修改</el-button
+        >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('compile', scope.row.classId)"
+          @click.native="$emit('Dev', scope.row.id)"
           >删除</el-button
         >
       </template>
