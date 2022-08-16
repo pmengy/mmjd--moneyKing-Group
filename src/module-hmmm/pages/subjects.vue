@@ -32,7 +32,12 @@
         </el-form>
       </el-card>
       <!-- 警示框 -->
-      <el-alert title="消息提示的文案" type="info" show-icon :closable="false">
+      <el-alert
+        :title="`数据一共有${total}条`"
+        type="info"
+        show-icon
+        :closable="false"
+      >
       </el-alert>
       <!-- 表格 -->
       <Table
@@ -41,7 +46,13 @@
         :currentIndex="pageIndex * 10"
       ></Table>
       <!-- 底部分页 -->
-      <PageTool></PageTool>
+      <PageTool
+        :total="total"
+        :paginationPage="page.page"
+        :paginationPagesize="page.pagesize"
+        @pageChange="pageChange"
+        @pageSizeChange="pageSizeChange"
+      ></PageTool>
     </el-card>
     <!-- 弹框 -->
     <el-dialog title="收货地址" :visible.sync="labelVisible" width="25%">
@@ -83,18 +94,23 @@ export default {
     return {
       // 表单数据
       currentList: [],
-      taskStatusList: [], //搜索选择框数据
       formInline: {}, //搜索表单数据
       pageIndex: "", //页码
       labelVisible: false, //新增弹窗
       value1: true, //表单中是否显示
       labelform: {}, //新增数据
+      total: "", //总数
+      page: {
+        page: 1, //当前页数
+        pagesize: 10, //每页展示的条数
+      },
+
       tableLabel: [
         { label: "学科名称", width: "150", prop: "subjectName" },
-        { label: "创建者", width: "150", prop: "creator" },
+        { label: "创建者", width: "150", prop: "username" },
         { label: "创建日期", width: "150", prop: "addDate" },
         { label: "前台是否显示", width: "150", prop: "isFrontDisplay" },
-        { label: "二级目录", width: "150", prop: "twoLevelDirectory.length" },
+        { label: "二级目录", width: "150", prop: "isFrontDisplay" },
         { label: "标签", width: "150", prop: "tags" },
         { label: "题目数量", width: "150", prop: "totals" },
       ],
@@ -114,10 +130,22 @@ export default {
   methods: {
     // 学科列表获取
     async sunjectList() {
-      const res = await list();
+      const res = await list(this.page);
       this.currentList = res.data.items;
+      this.total = res.data.counts;
       console.log(res);
     },
+    // 根据页数跳转
+    pageChange(val) {
+      this.page.page = val;
+      this.sunjectList();
+    },
+    // 根据每页多少请求
+    pageSizeChange(val) {
+      this.page.pagesize = val;
+      this.sunjectList();
+    },
+    // 未知
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");
     },

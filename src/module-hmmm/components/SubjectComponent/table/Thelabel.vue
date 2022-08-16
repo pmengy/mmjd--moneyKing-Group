@@ -27,24 +27,18 @@
           type="text"
           style="color: #4368e1"
           @click.native="$emit('Dev', scope.row.classId)"
-          >学科分类</el-button
+          >禁用</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
           @click.native="$emit('Dev', scope.row.classId)"
-          >学科标签</el-button
-        >
-        <el-button
-          type="text"
-          style="color: #4368e1"
-          @click.native="$emit('compile', scope.row.classId)"
           >修改</el-button
         >
         <el-button
           type="text"
           style="color: #4368e1"
-          @click.native="$emit('Dev', scope.row.classId)"
+          @click.native="$emit('compile', scope.row.classId)"
           >删除</el-button
         >
       </template>
@@ -53,6 +47,8 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+
 export default {
   data() {
     return {};
@@ -73,7 +69,18 @@ export default {
   },
   created() {},
 
-  methods: {},
+  methods: {
+    formatData(row, column, cellcValue, index) {
+      // console.log(column);
+      if (column.label === "状态") {
+        return cellcValue === 0 ? "已禁用" : "启用";
+      } else if (column.label === "创建日期") {
+        return dayjs(cellcValue).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        return cellcValue;
+      }
+    },
+  },
 };
 </script>
 

@@ -42,7 +42,12 @@
         </el-form>
       </el-card>
       <!-- 警示框 -->
-      <el-alert title="消息提示的文案" type="info" show-icon :closable="false">
+      <el-alert
+        :title="`数据一共有${total}条`"
+        type="info"
+        show-icon
+        :closable="false"
+      >
       </el-alert>
       <!-- 表格 -->
       <Table
@@ -51,7 +56,13 @@
         :currentIndex="pageIndex * 10"
       ></Table>
       <!-- 底部分页 -->
-      <PageTool></PageTool>
+      <PageTool
+        :total="total"
+        :paginationPage="page.page"
+        :paginationPagesize="page.pagesize"
+        @pageChange="pageChange"
+        @pageSizeChange="pageSizeChange"
+      ></PageTool>
     </el-card>
     <!-- 弹框 -->
     <el-dialog title="收货地址" :visible.sync="labelVisible" width="25%">
@@ -101,10 +112,15 @@ export default {
       pageIndex: "", //页码
       labelVisible: false, //新增弹窗
       labelform: {}, //新增数据
+      total: "", //总数
+      page: {
+        page: 1, //当前页数
+        pagesize: 10, //每页展示的条数
+      },
       tableLabel: [
         { label: "所属学科", width: "210", prop: "subjectName" },
         { label: "标签名称", width: "210", prop: "tagName" },
-        { label: "创建者", width: "210", prop: "creator" },
+        { label: "创建者", width: "210", prop: "username" },
         { label: "创建日期", width: "210", prop: "addDate" },
         { label: "状态", width: "210", prop: "state" },
       ],
@@ -123,10 +139,22 @@ export default {
 
   methods: {
     // 列表获取
+    // 学科列表获取
     async sunjectList() {
-      const res = await list();
+      const res = await list(this.page);
       this.currentList = res.data.items;
+      this.total = res.data.counts;
       console.log(res);
+    },
+    // 根据页数跳转
+    pageChange(val) {
+      this.page.page = val;
+      this.sunjectList();
+    },
+    // 根据每页多少请求
+    pageSizeChange(val) {
+      this.page.pagesize = val;
+      this.sunjectList();
     },
     resetDateFilter() {
       this.$refs.filterTable.clearFilter("date");

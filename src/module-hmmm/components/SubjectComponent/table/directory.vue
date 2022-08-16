@@ -47,7 +47,10 @@
 </template>
 
 <script>
+import dayjs from "dayjs";
+
 export default {
+  name: "dierct",
   data() {
     return {};
   },
@@ -67,7 +70,18 @@ export default {
   },
   created() {},
 
-  methods: {},
+  methods: {
+    formatData(row, column, cellcValue, index) {
+      // console.log(column);
+      if (column.label === "状态") {
+        return cellcValue === 0 ? "已禁用" : "启用";
+      } else if (column.label === "创建日期") {
+        return dayjs(cellcValue).format("YYYY-MM-DD HH:mm:ss");
+      } else {
+        return cellcValue;
+      }
+    },
+  },
 };
 </script>
 
