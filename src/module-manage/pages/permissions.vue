@@ -5,7 +5,7 @@
         <div class="tool">
           <div class="left">
             <el-input v-model="input" placeholder="根据用户名搜索"></el-input>
-            <el-button @click='input=""'>清除</el-button>
+            <el-button @click="input = ''">清除</el-button>
             <el-button type="primary" @click="search">搜索</el-button>
           </div>
           <div class="right">
@@ -93,32 +93,36 @@
         </div>
       </div>
     </el-card>
-    <permissionsAdd @getList='getList' ref="Add" :pageTitle='pageTitle' :text='text'></permissionsAdd>
+    <permissionsAdd
+      @getList="getList"
+      ref="Add"
+      :pageTitle="pageTitle"
+      :text="text"
+    ></permissionsAdd>
   </div>
 </template>
 
 <script>
-import { list,remove } from "@/api/base/permissions";
-import permissionsAdd from '../components/permissions-add.vue'
+import { list, remove } from "@/api/base/permissions";
+import permissionsAdd from "../components/permissions-add.vue";
 export default {
-  name:'PERMISS',
+  name: "PERMISS",
   data() {
     return {
       input: "",
       tableData: [],
-      data:{
-        page:'1',
-        pagesize:'10',
-        title:'',
+      data: {
+        page: "1",
+        pagesize: "10",
+        title: "",
       },
       currentPage: 1,
       total: 0,
-      text:'',
-      pageTitle:'权限组'
-
+      text: "",
+      pageTitle: "权限组",
     };
   },
-  components: {permissionsAdd},
+  components: { permissionsAdd },
   created() {
     this.getList();
   },
@@ -128,19 +132,19 @@ export default {
       this.multipleSelection = val;
     },
     handleSizeChange(val) {
-      this.data.pagesize=val
+      this.data.pagesize = val;
       console.log(`每页 ${val} 条`);
       this.getList();
     },
     handleCurrentChange(val) {
-      this.data.page=val
+      this.data.page = val;
       console.log(`当前页: ${val}`);
       this.getList();
     },
     async getList() {
       const res = await list(this.data);
       this.tableData = res.data.list;
-      this.total=res.data.counts
+      this.total = res.data.counts;
       console.log(res);
       console.log(this.tableData, "权限数据列表");
     },
@@ -151,31 +155,31 @@ export default {
       }
     },
     //搜索框
-    async search(){
-      this.data.title = this.input
-      const res = await list(this.data)
+    async search() {
+      this.data.title = this.input;
+      const res = await list(this.data);
       this.tableData = res.data.list;
-      this.total=res.data.counts
-      console.log(res,'搜索权限数据列表');
+      this.total = res.data.counts;
+      console.log(res, "搜索权限数据列表");
     },
     //新建
-    perAdd(){
-      this.text='创建'
-      this.$refs.Add.dialogFormV()
+    perAdd() {
+      this.text = "创建";
+      this.$refs.Add.dialogFormV();
     },
     //编辑
-    handleEdit(row){
-      this.text='编辑'
-      this.$refs.Add.dialogFormV()
-      this.$refs.Add.hanldeEditForm(row.id)
+    handleEdit(row) {
+      this.text = "编辑";
+      this.$refs.Add.dialogFormV();
+      this.$refs.Add.hanldeEditForm(row.id);
     },
     //删除
-    async handleDelete(row){
-      const data = {id: row.id}
-      await remove(data)
-      this.$message.success('删除成功')
+    async handleDelete(row) {
+      const data = { id: row.id };
+      await remove(data);
+      this.$message.success("删除成功");
       this.getList();
-    }
+    },
   },
 };
 </script>
