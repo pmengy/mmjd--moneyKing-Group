@@ -4,7 +4,7 @@
       <!-- 头部搜索框 -->
       <search-header
         :isShowSearch="false"
-        right-text="添加菜单"
+        right-text="添加菜单/权限点"
         @addNew="addNewMenu"
       />
       <!-- 树形表格 -->

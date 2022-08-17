@@ -238,6 +238,7 @@ export default {
       this.loading = true;
       update(this.formMenu).then(() => {
         this.loading = false;
+        this.$message.success("更新信息成功！");
         this.$emit("handleCloseModal");
         this.$emit("newDataes", this.formMenu);
       });
@@ -247,6 +248,7 @@ export default {
       this.loading = true;
       add(this.formMenu).then(() => {
         this.loading = false;
+        this.$message.success("添加成功！");
         _this.handleResetForm();
         // _this.type = 'menu'
         this.$emit("handleCloseModal");
@@ -258,11 +260,9 @@ export default {
       if (_this.type === "points") {
         this.formMenu.is_point = true;
         this.select_Add();
-        this.loading = false;
       } else {
         this.formMenu.is_point = false;
         this.select_Add();
-        this.loading = false;
       }
     },
     // 表单提交
