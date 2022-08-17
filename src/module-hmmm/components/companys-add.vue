@@ -14,7 +14,9 @@
       >
         <el-form-item label="企业名称" prop="shortName">
           <el-input v-model="formBase.shortName"></el-input>
-          <el-checkbox v-model="formBase.isFamous">是否为名企</el-checkbox>
+          <el-checkbox v-model="formBase.isFamous"
+            >是否为名企</el-checkbox
+          >
         </el-form-item>
         <el-form-item label="所属公司" prop="company">
           <el-input v-model="formBase.company"></el-input>
@@ -73,7 +75,7 @@
   </div>
 </template>
 <script>
-import { update, add } from "@/api/base/users";
+import { update, add } from "@/api/hmmm/companys";
 import { provinces, citys } from "@/api/hmmm/citys.js";
 export default {
   name: "CompanysAdd",
@@ -128,6 +130,7 @@ export default {
     // 表单提交
     createData() {
       this.$refs.dataForm.validate(async (valid) => {
+        this.formBase.isFamous = true;
         if (valid) {
           this.dialogFormH();
           const data = {
@@ -146,6 +149,7 @@ export default {
           this.$message.error("*号为必填项!");
         }
       });
+      this.formBase = {};
     },
   },
   // 挂载结束
