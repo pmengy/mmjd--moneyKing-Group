@@ -1,6 +1,13 @@
 <template>
   <div class="add-form">
-    <el-dialog :title="text + pageTitle" :visible.sync="dialogFormVisible">
+    <el-dialog
+      :title="text + pageTitle"
+      :visible.sync="dialogFormVisible"
+      v-loading="loading"
+      element-loading-spinner="el-icon-loading"
+      element-loading-background="rgba(0, 0, 0, 0.8)"
+      element-loading-text="客官，稍等片刻~~"
+    >
       <el-form
         :rules="ruleInline"
         ref="formMenu"
@@ -70,8 +77,8 @@ import { list, detail, update, add } from "@/api/base/menus";
 import Utils from "@/components/TreeTable/utils/dataTranslate.js";
 let _this = [];
 export default {
-  name: "items",
-  // props: ["text", "pageTitle", "PermissionGroupsList"],
+  name: "MenuAdd",
+  props: ["text", "pageTitle", "PermissionGroupsList"],
   props: {
     treeStructure: {
       type: Boolean,
@@ -154,7 +161,15 @@ export default {
       leafCount: [],
     };
   },
+  watch: {
+    showPointBlock(newVal) {
+      this.$emit("changeName", newVal);
+    },
+  },
   computed: {},
+  // created() {
+  //   this.hanldeEditForm();
+  // },
   methods: {
     // 弹层显示
     dialogFormV() {
@@ -220,14 +235,18 @@ export default {
     },
     // 菜单和权限点选择：编辑
     handle_Edit(object) {
+      this.loading = true;
       update(this.formMenu).then(() => {
+        this.loading = false;
         this.$emit("handleCloseModal");
         this.$emit("newDataes", this.formMenu);
       });
     },
     // 菜单和权限点选择：添加
     select_Add() {
+      this.loading = true;
       add(this.formMenu).then(() => {
+        this.loading = false;
         _this.handleResetForm();
         // _this.type = 'menu'
         this.$emit("handleCloseModal");
@@ -235,12 +254,15 @@ export default {
       });
     },
     handle_Add(object) {
+      this.loading = true;
       if (_this.type === "points") {
         this.formMenu.is_point = true;
         this.select_Add();
+        this.loading = false;
       } else {
         this.formMenu.is_point = false;
         this.select_Add();
+        this.loading = false;
       }
     },
     // 表单提交
@@ -285,14 +307,19 @@ export default {
       }
     },
     hanldeEditForm(objeditId) {
+      // 编辑状态菜单和权限点改为禁用状态true
+      this.typeStatus = true;
       this.formMenu.id = objeditId;
+      this.loading = true;
       list().then((data) => {
+        this.loading = false;
         _this.parentDataList = data.data;
         _this.notPointDataList = [];
         this.dataRest(data.data);
         this.changeArays();
       });
       detail({ id: objeditId }).then((data) => {
+        this.loading = false;
         this.formMenu.id = data.data.id;
         this.formMenu.pid = data.data.pid;
         this.formMenu.title = data.data.title;
@@ -460,6 +487,3 @@ export default {
   }
 }
 </style>
-
-作者：CRPER 链接：https://juejin.im/post/5972ea2f6fb9a06bc569204f 来源：掘金
-著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。

@@ -3,7 +3,9 @@
     :data="formatData"
     :row-class-name="rowClassStatus"
     v-loading="listLoading"
-    element-loading-text="给我一点时间"
+    element-loading-spinner="el-icon-loading"
+    element-loading-background="rgba(0, 0, 0, 0.8)"
+    element-loading-text="客官，稍等片刻~~"
     fit
     highlight-current-row
     style="width: 100%"
@@ -36,16 +38,16 @@
             <i
               class="el-icon-folder-opened"
               style="margin-left: 20px"
-              v-if="scope.row._level === 0"
+              v-if="scope.row._level === 0 && !scope.row.is_point"
             />
             <i
               class="el-icon-document"
-              v-if="scope.row._level === 1"
+              v-if="scope.row._parent && !scope.row.is_point"
               style="margin-left: 40px"
             />
             <i
               class="el-icon-view"
-              v-if="scope.row._level === 2"
+              v-if="scope.row.is_point"
               style="margin-left: 60px"
             />
             {{ scope.row[column.value] }}
@@ -58,15 +60,21 @@
     </el-table-column>
     <el-table-column label="操作" width="260" align="center">
       <template slot-scope="scope">
-        <el-button size="mini" type="primary" @click="handleUpdate(scope.row)">
-          修改
+        <el-button
+          size="small"
+          type="primary"
+          @click="handleUpdate(scope.row)"
+          icon="el-icon-edit"
+          circle
+        >
         </el-button>
         <el-button
-          size="mini"
+          size="small"
           type="danger"
           @click="handleDelete(scope.row.id)"
+          icon="el-icon-delete"
+          circle
         >
-          删除
         </el-button>
       </template>
     </el-table-column>
@@ -139,8 +147,6 @@ export default {
         return "levelTwo";
       } else if (row._level === 2) {
         return "levelThree";
-      } else if (rowIndex === 0) {
-        return "headerClass";
       }
     },
     // 修改
@@ -206,19 +212,18 @@ table td {
   color: $color-blue;
   margin-left: -$space-width;
 }
-::v-deep tr.headerClass {
-  background-color: red !important;
-}
+// ::v-deep tr.headerClass {
+//   background-color: red !important;
+// }
 ::v-deep.el-table .levelOne {
-  background: yellowgreen;
+  background: #eee;
 }
 
 ::v-deep.el-table .levelTwo {
-  background: violet;
-  padding-left: 30px;
+  background: #ccc;
 }
 ::v-deep.el-table .levelThree {
-  background: skyblue;
+  background: #a8a8a8;
   margin-left: 60px;
 }
 </style>

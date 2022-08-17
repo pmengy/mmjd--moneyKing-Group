@@ -46,12 +46,14 @@
               icon="el-icon-edit"
               circle
               @click="Edit(row.id)"
+              v-if="row.id !== 2"
             ></el-button>
             <el-button
               type="danger"
               icon="el-icon-delete"
               circle
               @click="delUser(row)"
+              v-if="row.id !== 2"
             >
             </el-button>
           </template>
