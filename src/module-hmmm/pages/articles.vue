@@ -40,6 +40,7 @@
             <p>
               {{ row.title }}
               <i
+                @click="showVideo(row.videoURL)"
                 style="color: #0000ff; font-size: 18px"
                 class="el-icon-film"
                 v-if="row.videoURL"
@@ -63,7 +64,12 @@
         </el-table-column>
         <el-table-column label="操作" min-width="180px">
           <template slot-scope="{ row }">
-            <el-button type="text" size="small">预览</el-button>
+            <el-button
+              @click="previewArticle(row.articleBody)"
+              type="text"
+              size="small"
+              >预览</el-button
+            >
             <el-button @click="updateState(row)" type="text" size="small">{{
               row.state ? "禁用" : "启用"
             }}</el-button>
@@ -84,6 +90,7 @@
           </template>
         </el-table-column>
       </el-table>
+      <!-- 分页 -->
       <div class="pagination">
         <page-pagination
           :total="counts"
@@ -100,6 +107,26 @@
         :dialogVisible.sync="articleDialog"
         @updateList="getArticleList"
       />
+      <el-dialog title="播放视频" width="50%" :visible.sync="videoVisible">
+        <div>
+          <meta name="referrer" content="no-referrer" />
+          <video
+            ref="video"
+            width="700px"
+            height="500px"
+            controls
+            autoplay
+          ></video>
+        </div>
+      </el-dialog>
+      <!-- 文章预览 -->
+      <el-dialog title="预览文章" width="50%" :visible.sync="visibleArtInfo">
+        <article
+          class="markdown-body article-content"
+          v-highlight
+          v-html="content"
+        ></article>
+      </el-dialog>
     </el-card>
   </div>
 </template>
@@ -111,6 +138,7 @@ import PagePagination from "../components/page-pagination.vue";
 import ArticleAdd from "../components/articles-add.vue";
 import articleMap from "../constant/article";
 import { list, remove, changeState } from "@/api/hmmm/articles.js";
+import "../../../node_modules/github-markdown-css/github-markdown-light.css";
 const { articleState } = articleMap;
 export default {
   components: { AlertTip, PagePagination, ArticleAdd },
@@ -121,12 +149,15 @@ export default {
         state: "",
       },
       articleDialog: false,
+      videoVisible: false,
+      visibleArtInfo: false,
       articleList: [],
       page: 1,
       pagesize: 10,
       counts: 0,
       articleState,
       title: "新增文章",
+      content: "",
     };
   },
 
@@ -135,6 +166,7 @@ export default {
   },
 
   methods: {
+    // 获取文章列表
     async getArticleList() {
       if (this.article.state === 0 || this.article.state === 1) {
         try {
@@ -163,6 +195,7 @@ export default {
         }
       }
     },
+    // 格式化时间和文章状态
     formatTime(row, column, cellValue) {
       return dayjs(cellValue).format("YYYY-MM-DD HH:mm:ss");
     },
@@ -183,13 +216,20 @@ export default {
     },
     // 删除文章
     async delArticle(id) {
-      try {
-        await remove({ id });
-        this.$message.success("删除成功");
-        this.getArticleList();
-      } catch (error) {
-        this.$message.error("删除失败");
-      }
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning",
+      })
+        .then(() => {
+          remove({ id });
+          this.getArticleList();
+          this.$message({
+            type: "success",
+            message: "删除成功!",
+          });
+        })
+        .catch(() => {});
     },
     // 修改文章状态
     async updateState(data) {
@@ -210,6 +250,7 @@ export default {
       this.page = 1;
       this.getArticleList();
     },
+    // 搜索
     async onSearch(e) {
       this.page = 1;
       await this.getArticleList();
@@ -233,6 +274,15 @@ export default {
       this.title = "修改文章";
       this.articleDialog = true;
       this.$refs.articleAdd.form = row;
+    },
+    // 视频
+    showVideo(url) {
+      this.videoVisible = true;
+      this.$refs.video.src = url;
+    },
+    previewArticle(content) {
+      this.content = content;
+      this.visibleArtInfo = true;
     },
   },
 };
