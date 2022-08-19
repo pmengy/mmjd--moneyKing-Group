@@ -13,6 +13,7 @@ import * as filters from "./filters"; // global filters
 import "./mock"; // simulation data
 // font-awesome
 import "font-awesome/css/font-awesome.css";
+import dayjs from "dayjs";
 /*
  * 注册 - 业务模块
  */
@@ -42,6 +43,10 @@ Object.keys(filters).forEach((key) => {
 });
 
 Vue.config.productionTip = false;
+
+Vue.filter("formatDate", (value) => {
+  return dayjs(value).format("YYYY-MM-DD HH:mm:ss");
+});
 
 // 代码高亮
 Vue.directive("highlight", function (el) {

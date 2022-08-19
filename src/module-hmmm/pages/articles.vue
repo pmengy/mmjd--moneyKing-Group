@@ -64,10 +64,7 @@
         </el-table-column>
         <el-table-column label="操作" min-width="180px">
           <template slot-scope="{ row }">
-            <el-button
-              @click="previewArticle(row.articleBody)"
-              type="text"
-              size="small"
+            <el-button @click="previewArticle(row)" type="text" size="small"
               >预览</el-button
             >
             <el-button @click="updateState(row)" type="text" size="small">{{
@@ -107,11 +104,16 @@
         :dialogVisible.sync="articleDialog"
         @updateList="getArticleList"
       />
-      <el-dialog title="播放视频" width="50%" :visible.sync="videoVisible">
+      <el-dialog
+        :before-close="onBeforeClose"
+        title="播放视频"
+        width="50%"
+        :visible.sync="videoVisible"
+      >
         <div>
           <meta name="referrer" content="no-referrer" />
           <video
-            ref="video"
+            ref="videoPlayer"
             width="700px"
             height="500px"
             controls
@@ -121,11 +123,29 @@
       </el-dialog>
       <!-- 文章预览 -->
       <el-dialog title="预览文章" width="50%" :visible.sync="visibleArtInfo">
-        <article
-          class="markdown-body article-content"
-          v-highlight
-          v-html="content"
-        ></article>
+        <div>
+          <div>
+            <h5 class="title">
+              {{ currentRow.title }}
+            </h5>
+            <p class="description">
+              <span>{{ currentRow.createTime | formatDate }}</span>
+              <span>{{ currentRow.username }}</span>
+              <span>
+                <i class="el-icon-view"></i>
+                {{ currentRow.visits }}
+              </span>
+            </p>
+          </div>
+          <div class="context">
+            <article
+              class="markdown-body article-content"
+              v-highlight
+              v-html="currentRow.articleBody"
+              style="background-color: #f5f5f5"
+            ></article>
+          </div>
+        </div>
       </el-dialog>
     </el-card>
   </div>
@@ -138,7 +158,7 @@ import PagePagination from "../components/page-pagination.vue";
 import ArticleAdd from "../components/articles-add.vue";
 import articleMap from "../constant/article";
 import { list, remove, changeState } from "@/api/hmmm/articles.js";
-import "../../../node_modules/github-markdown-css/github-markdown-light.css";
+import "../../../node_modules/github-markdown-css/github-markdown.css";
 const { articleState } = articleMap;
 export default {
   components: { AlertTip, PagePagination, ArticleAdd },
@@ -157,7 +177,7 @@ export default {
       counts: 0,
       articleState,
       title: "新增文章",
-      content: "",
+      currentRow: {},
     };
   },
 
@@ -278,11 +298,17 @@ export default {
     // 视频
     showVideo(url) {
       this.videoVisible = true;
-      this.$refs.video.src = url;
+      this.$nextTick(() => {
+        this.$refs.videoPlayer.src = url;
+      });
     },
     previewArticle(content) {
-      this.content = content;
+      this.currentRow = content;
       this.visibleArtInfo = true;
+    },
+    onBeforeClose() {
+      this.$refs.videoPlayer.pause();
+      this.videoVisible = false;
     },
   },
 };
@@ -294,6 +320,24 @@ export default {
     display: flex;
     justify-content: flex-end;
     margin-top: 20px;
+  }
+}
+.title {
+  font-size: 21px;
+  font-weight: 700;
+  color: #606266;
+  padding: 0;
+  margin: 0;
+}
+.context {
+  background-color: #f5f5f5;
+  padding: 20px;
+  border-top: 1px dashed #ccc;
+}
+.description {
+  font-size: 14px;
+  span {
+    margin-right: 10px;
   }
 }
 </style>
