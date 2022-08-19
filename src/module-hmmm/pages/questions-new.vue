@@ -1,9 +1,27 @@
 <template>
-  <div class='app-container'>试题录入</div>
+  <div>
+
+  </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+
+    }
+  },
+
+  created () {
+
+  },
+
+  methods: {
+
+  }
+}
 </script>
 
-<style scoped lang='less'></style>
+<style scoped lang='less'>
+
+</style>

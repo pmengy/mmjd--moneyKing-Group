@@ -1,17 +1,27 @@
 <template>
-  <div class="app-container">
-    精选题库
+  <div>
 
-    <alert-tip :total="10" />
   </div>
 </template>
 
 <script>
-import AlertTip from "../components/alert-tip.vue";
 export default {
-  name: "QuestionsRandoms",
-  components: { AlertTip },
-};
+  data () {
+    return {
+
+    }
+  },
+
+  created () {
+
+  },
+
+  methods: {
+
+  }
+}
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang='less'>
+
+</style>

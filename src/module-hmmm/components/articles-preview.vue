@@ -1,9 +1,9 @@
 <template>
-  <div class='container'>预览文章对话框</div>
+  <div class="app-container">预览文章对话框</div>
 </template>
 
 <script>
-export default {}
+export default {};
 </script>
 
-<style scoped lang='less'></style>
+<style scoped lang="less"></style>

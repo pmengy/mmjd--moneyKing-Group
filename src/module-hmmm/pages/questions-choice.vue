@@ -1,9 +1,27 @@
 <template>
-  <div class='app-container'>精选题库</div>
+  <div>
+
+  </div>
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+
+    }
+  },
+
+  created () {
+
+  },
+
+  methods: {
+
+  }
+}
 </script>
 
-<style scoped lang='less'></style>
+<style scoped lang='less'>
+
+</style>
