@@ -97,7 +97,6 @@ export const createFormAPI = (url, method, data) => {
       }
       return ret;
     },
-    ,
   ];
   return instance({
     url,
