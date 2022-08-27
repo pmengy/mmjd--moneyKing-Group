@@ -149,7 +149,7 @@ export default {
           this.$message.error("*号为必填项!");
         }
       });
-      this.formBase = {};
+      // this.formBase = {};
     },
   },
   // 挂载结束
