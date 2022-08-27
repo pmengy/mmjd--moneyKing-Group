@@ -230,10 +230,24 @@ export default {
     // 删除
     async delUser(info) {
       await this.$confirm("确定删除？");
+      console.log(this.userData);
+      if (this.userData.length === 1) {
+        this.queryInfo.page = this.queryInfo.page - 1;
+        // console.log("0000");
+        this.getUserList();
+      }
       await remove(info);
       this.$message.success("删除用户成功！");
       this.getUserList();
-      this.$message.fail("删除用户失败！");
+      console.log(this.userData);
+      // if (this.userData.length === 0) {
+      //   console.log(312313);
+      //   this.queryInfo.page = 1;
+      //   console.log("0000");
+      //   this.getUserList();
+      // }
+      // this.getUserList();
+      // this.$message.fail("删除用户失败！");
     },
   },
 };
