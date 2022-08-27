@@ -145,7 +145,7 @@ export default {
         return "levelOne";
       } else if (row._level === 1) {
         return "levelTwo";
-      } else if (row._level === 2) {
+      } else if (row._level === 2 && row.is_point) {
         return "levelThree";
       }
     },
