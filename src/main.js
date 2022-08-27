@@ -1,18 +1,19 @@
-import Vue from 'vue'
-import 'normalize.css/normalize.css' // A modern alternative to CSS resets
-import Element from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import '@/styles/index.scss' // global css
-import App from './App'
-import router from './router'
-import store from './store'
-import i18n from './lang' // Internationalization
-import './icons' // icon
-import './errorLog' // error log
-import * as filters from './filters' // global filters
-import './mock' // simulation data
+import Vue from "vue";
+import "normalize.css/normalize.css"; // A modern alternative to CSS resets
+import Element from "element-ui";
+import "element-ui/lib/theme-chalk/index.css";
+import "@/styles/index.scss"; // global css
+import App from "./App";
+import router from "./router";
+import store from "./store";
+import i18n from "./lang"; // Internationalization
+import "./icons"; // icon
+import "./errorLog"; // error log
+import * as filters from "./filters"; // global filters
+import "./mock"; // simulation data
 // font-awesome
-import 'font-awesome/css/font-awesome.css'
+import "font-awesome/css/font-awesome.css";
+import dayjs from "dayjs";
 /*
  * 注册 - 业务模块
  */
@@ -21,8 +22,8 @@ import base from '@/module-manage/' // 用户管理
 import hmmm from '@/module-hmmm/' // 黑马面面
 import AFTableColumn from 'af-table-column' //表格自适应
 
-Vue.use(dashboard, store)
-Vue.use(base, store)
+Vue.use(dashboard, store);
+Vue.use(base, store);
 // Vue.use(list, store)
 // Vue.use(form, store)
 // Vue.use(details, store)
@@ -35,21 +36,33 @@ Vue.use(AFTableColumn)
 
 // 饿了么
 Vue.use(Element, {
-  size: 'medium', // set element-ui default size
-  i18n: (key, value) => i18n.t(key, value)
-})
+  size: "medium", // set element-ui default size
+  i18n: (key, value) => i18n.t(key, value),
+});
 // 过滤器
-Object.keys(filters).forEach(key => {
-  Vue.filter(key, filters[key])
-})
+Object.keys(filters).forEach((key) => {
+  Vue.filter(key, filters[key]);
+});
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+
+Vue.filter("formatDate", (value) => {
+  return dayjs(value).format("YYYY-MM-DD HH:mm:ss");
+});
+
+// 代码高亮
+Vue.directive("highlight", function (el) {
+  const blocks = el.querySelectorAll("pre code");
+  blocks.forEach((block) => {
+    hljs.highlightBlock(block);
+  });
+});
 
 /* eslint-disable */
 new Vue({
-  el: '#app',
+  el: "#app",
   router,
   store,
   i18n,
-  render: h => h(App)
-})
+  render: (h) => h(App),
+});

@@ -125,6 +125,8 @@ export default {
     // 退出
     handleClose () {
       this.$emit('handleCloseModal')
+      this.dialogFormVisible = false
+      this.handleResetForm()
     },
     // 表单重置
     handleResetForm () {
