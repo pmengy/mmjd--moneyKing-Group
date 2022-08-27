@@ -8,7 +8,7 @@
   >
     <div class="content">
       <ul class="type">
-        <li>【题型】：单选题</li>
+        <li>【题型】：{{ questionInfo.questionType }}</li>
         <li>【编号】：29</li>
         <li>【难度】：简单</li>
         <li>【标签】：css3 bfc</li>
@@ -16,8 +16,10 @@
         <li>【目录】：css基础</li>
         <li>【方向】：企业服务</li>
       </ul>
-      <div class="title">【题干】：<span>1+1等于几？</span></div>
-      单选题 选项：（以下选中的选项为正确答案）
+      <div class="title">
+        【题干】：
+        <div v-html="questionInfo.question">1+1等于几？</div>
+      </div>
       <div class="options">
         <el-radio disabled v-model="radio" label="1">1</el-radio>
         <el-radio disabled v-model="radio" label="2">2</el-radio>
@@ -37,12 +39,16 @@
 
 <script>
 import { detail } from "@/api/hmmm/questions.js";
+import randoms from "../constant/randoms";
+const questionType = randoms.questionType;
 export default {
   name: "ArticlePreview",
   data() {
     return {
       radio: "2",
       id: "",
+      questionInfo: {},
+      questionType,
     };
   },
   props: {
@@ -62,8 +68,15 @@ export default {
     async getDetails() {
       const res = await detail({ id: this.id });
       console.log(res);
+      this.questionInfo = res.data;
     },
   },
+  // filters: {
+  //   formatQuestionType(type) {
+  //     const index = this.questionType.findIndex((item) => item.id === type);
+  //     return this.questionType[index].value;
+  //   },
+  // },
 };
 </script>
 
@@ -88,7 +101,7 @@ export default {
   }
   .title {
     margin: 10px 0;
-    span {
+    div {
       color: #5252fc;
     }
   }
