@@ -282,6 +282,7 @@ export default {
     // 新增文章
     addArticle() {
       this.title = "新增文章";
+      console.log(this.$refs.articleAdd);
       this.$refs.articleAdd.form = {
         title: "",
         articleBody: "",

@@ -29,7 +29,9 @@
         <el-table-column min-width="250px" label="题目编号">
           <template slot-scope="{ row }">
             <div v-for="item in row.questionIDs" :key="item.number">
-              <a style="color: #0099ff" href="#">{{ item.number }}</a>
+              <a @click="showDetail(item.id)" style="color: #0099ff" href="#">{{
+                item.number
+              }}</a>
             </div>
           </template>
         </el-table-column>
@@ -68,6 +70,7 @@
           :paginationPage="paginationPage"
         ></page-pagination>
       </div>
+      <ArticlePreview :id="currentId" :visible.sync="visiblePreview" />
     </el-card>
   </div>
 </template>
@@ -75,12 +78,13 @@
 <script>
 import AlertTip from "../components/alert-tip.vue";
 import PagePagination from "../components/page-pagination.vue";
+import ArticlePreview from "../components/articles-preview.vue";
 import { randoms, removeRandoms } from "@/api/hmmm/questions.js";
 import randomsMap from "../constant/randoms";
 const { questionType } = randomsMap;
 export default {
   name: "QuestionsRandoms",
-  components: { AlertTip, PagePagination },
+  components: { AlertTip, PagePagination, ArticlePreview },
   data() {
     return {
       keyword: "",
@@ -89,7 +93,9 @@ export default {
       paginationPagesize: 20,
       paginationPage: 1,
       loading: false,
+      visiblePreview: false,
       questionType,
+      currentId: "",
     };
   },
   created() {
@@ -171,6 +177,11 @@ export default {
     formatQuestionType(row, column, cellValue) {
       const findItem = this.questionType.find((item) => item.id === cellValue);
       return findItem ? findItem.value : "未知";
+    },
+    showDetail(id) {
+      this.visiblePreview = true;
+      this.currentId = id;
+      // console.log(id);
     },
   },
 };
