@@ -1,6 +1,7 @@
 <template>
   <el-dialog
     @close="onClose"
+    @open="onOpen"
     :title="title"
     :visible="dialogVisible"
     width="60%"
@@ -73,22 +74,24 @@ export default {
           await add(this.form);
           this.$emit("updateList");
           this.$message.success("新增文章成功");
+          this.dialogVisible = false;
         } else {
           await update(this.form);
           this.$emit("updateList");
           this.$message.success("修改文章成功");
+          this.dialogVisible = false;
         }
-      } catch (error) {
-        return this.$message.error("网络不太稳定,请稍后重试");
-      } finally {
-        this.dialogVisible = false;
-      }
+      } catch (error) {}
     },
     onEditorChange(val) {
       this.form.articleBody = val;
     },
     onClose() {
       this.$emit("update:dialogVisible", false);
+    },
+    async onOpen() {
+      await this.$refs.form.resetFields();
+      this.form.videoURL = "";
     },
   },
 };

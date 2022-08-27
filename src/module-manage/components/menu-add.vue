@@ -143,7 +143,7 @@ export default {
       parentDataList: [],
       formMenu: {
         pid: "", // 父级Id
-        is_point: "", // 是否权限点
+        is_point: "", // 是否权限点ding
         code: "", // 菜单代码
         title: "", // 标题
       },
@@ -159,6 +159,7 @@ export default {
         code: [{ required: true, validator: validateCode, trigger: "blur" }],
       },
       leafCount: [],
+      loading: false,
     };
   },
   watch: {
