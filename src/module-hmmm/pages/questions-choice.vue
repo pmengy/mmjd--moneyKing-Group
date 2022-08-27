@@ -1,27 +1,22 @@
 <template>
   <div>
-
+    <basicques></basicques>
   </div>
 </template>
 
 <script>
+import basicques from "../components/BasicquestionBankForm.vue";
 export default {
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
-
-  created () {
-
+  components: {
+    basicques,
   },
+  created() {},
 
-  methods: {
-
-  }
-}
+  methods: {},
+};
 </script>
 
-<style scoped lang='less'>
-
-</style>
+<style scoped lang="less"></style>

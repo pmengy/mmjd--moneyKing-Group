@@ -1,27 +1,19 @@
 <template>
   <div>
-
+    <basicques></basicques>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-
-    }
+  data() {
+    return {};
   },
 
-  created () {
+  created() {},
 
-  },
-
-  methods: {
-
-  }
-}
+  methods: {},
+};
 </script>
 
-<style scoped lang='less'>
-
-</style>
+<style scoped lang="less"></style>
