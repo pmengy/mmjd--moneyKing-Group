@@ -5,11 +5,14 @@
 </template>
 
 <script>
+import basicques from "../components/BasicquestionBankForm.vue";
 export default {
   data() {
     return {};
   },
-
+  components: {
+    basicques,
+  },
   created() {},
 
   methods: {},
