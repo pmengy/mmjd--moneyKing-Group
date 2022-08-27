@@ -95,15 +95,21 @@
         </el-table-column>
         <el-table-column align="center" label="操作" width="150px">
           <template slot-scope="scope">
-            <el-button
-              class="el-icon-edit"
-              size="mini"
-              circle
-              type="primary"
-              plain
-              @click="handleEdit(scope.row)"
-            ></el-button>
-
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="修改"
+              placement="top"
+            >
+              <el-button
+                class="el-icon-edit"
+                size="mini"
+                circle
+                type="primary"
+                plain
+                @click="handleEdit(scope.row)"
+              ></el-button>
+            </el-tooltip>
             <el-tooltip
               class="item"
               effect="dark"
@@ -136,14 +142,21 @@
                 @click="handleChange(scope.row)"
               ></el-button>
             </el-tooltip>
-            <el-button
-              class="el-icon-delete"
-              size="mini"
-              circle
-              type="danger"
-              plain
-              @click="handleDelete(scope.row)"
-            ></el-button>
+            <el-tooltip
+              class="item"
+              effect="dark"
+              content="删除"
+              placement="top"
+            >
+              <el-button
+                class="el-icon-delete"
+                size="mini"
+                circle
+                type="danger"
+                plain
+                @click="handleDelete(scope.row)"
+              ></el-button>
+            </el-tooltip>
           </template>
         </el-table-column>
       </el-table>
@@ -258,6 +271,9 @@ export default {
       })
         .then(async () => {
           const data = { id: row.id };
+          if(this.tableData.length===1){
+            this.data.page=this.data.page-1
+          }
           await remove(data);
           this.$message.success("删除成功");
           this.getList();
